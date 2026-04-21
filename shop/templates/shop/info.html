@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                </ol>
+            </nav>
+            <h1 class="fw-bold mb-4">{{ title }}</h1>
+            <div class="bg-white p-5 shadow-sm rounded border">
+                <p class="text-muted lead fw-semibold mb-4">Welcome to the {{ title }} page.</p>
+                <div class="text-secondary lh-lg">
+                    <p>At E-Point, we are committed to providing you with the best possible experience. This section outlines our core policies, practices, and helpful information designed to give you clarity and peace of mind when shopping with us.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <h5 class="text-dark fw-bold mt-4 mb-3">Our Core Principles</h5>
+                    <ul class="mb-4">
+                        <li>Customer satisfaction is our highest priority.</li>
+                        <li>We ensure secure, reliable, and swift transactions.</li>
+                        <li>All data is heavily encrypted for your complete privacy.</li>
+                    </ul>
+                    <p>If you have any further questions or concerns regarding this information, please do not hesitate to reach out to our dedicated support team via the Contact Us portal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

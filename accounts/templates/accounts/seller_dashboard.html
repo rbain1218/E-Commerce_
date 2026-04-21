@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold"><i class="fas fa-chart-line text-primary me-2"></i>Seller Analytics Dashboard</h2>
+            <p class="text-muted">Real-time performance metrics and sales data for your products.</p>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-primary text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold opacity-75">Total Revenue</h6>
+                    <h2 class="display-5 fw-bold mb-0">₹{{ total_revenue|default:"0.00" }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold opacity-75">Total Orders</h6>
+                    <h2 class="display-5 fw-bold mb-0">{{ total_orders }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-info text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold opacity-75">Active Products</h6>
+                    <h2 class="display-5 fw-bold mb-0">{{ total_products }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Trend and Prediction -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        30-Day Sales Trend & AI Forecast 
+                        <span class="badge bg-primary ms-2 fs-6 align-middle"><i class="fas fa-robot me-1"></i> Predicted by AI</span>
+                    </h5>
+                    <div style="height: 300px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Category and Top Products -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Sales by Category</h5>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Top 5 Best-Selling Products</h5>
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Management Section -->
+    <div class="row g-4 mt-2">
+        <!-- Manage Banner Form -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="fw-bold mb-0">Manage Homepage Banner</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="add_banner" value="1">
+                        {{ banner_form.as_p }}
+                        <button type="submit" class="btn btn-primary w-100 mt-2">Save Banner</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Orders Table -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="fw-bold mb-0">Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                    <td>₹{{ order.total_amount }}</td>
+                                    <td>
+                                        <span class="badge 
+                                        {% if order.status == 'success' %}bg-success
+                                        {% elif order.status == 'pending' %}bg-warning text-dark
+                                        {% else %}bg-danger{% endif %}">
+                                        {{ order.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" class="d-flex gap-1 align-items-center mb-0">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="update_order" value="1">
+                                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                                            <select name="status" class="form-select form-select-sm" style="width: 100px;">
+                                                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                                <option value="success" {% if order.status == 'success' %}selected{% endif %}>Success</option>
+                                                <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No recent orders found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- Sales by Category (Doughnut) ---
+        const catCtx = document.getElementById('categoryChart').getContext('2d');
+        const catLabels = {{ chart_labels|safe }};
+        const catData = {{ chart_data|safe }};
+        if (catLabels.length === 0) {
+            document.getElementById('categoryChart').parentElement.innerHTML = '<p class="text-muted text-center mt-5">No sales data available yet.</p>';
+        } else {
+            new Chart(catCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        data: catData,
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69', '#2e59d9', '#17a673', '#2c9faf'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        // --- Sales Trend & AI Predictor (Line) ---
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const trendLabels = {{ trend_labels|safe }};
+        const trendData = {{ trend_data|safe }};
+        const aiPredictedLabels = {{ ai_predicted_labels|safe }};
+        const aiPredictedData = {{ ai_predicted_data|safe }};
+        
+        if (trendLabels.length === 0) {
+            document.getElementById('trendChart').parentElement.innerHTML = '<p class="text-muted text-center mt-5">Not enough data for trend analysis.</p>';
+        } else {
+            let combinedLabels = [...trendLabels, ...aiPredictedLabels];
+            let pastDataset = [...trendData, ...Array(aiPredictedLabels.length).fill(null)];
+            
+            let futureDataset = Array(trendData.length - 1).fill(null);
+            if (trendData.length > 0 && aiPredictedData.length > 0) {
+                 futureDataset.push(trendData[trendData.length - 1]);
+                 futureDataset.push(...aiPredictedData);
+            } else {
+                 futureDataset.push(null);
+                 futureDataset.push(...aiPredictedData);
+            }
+
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: combinedLabels,
+                    datasets: [
+                        {
+                            label: 'Actual Revenue (Last 30 Days)',
+                            data: pastDataset,
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'AI Forecast (Next 7 Days)',
+                            data: futureDataset,
+                            borderColor: '#1cc88a',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Revenue (₹)' } }
+                    }
+                }
+            });
+        }
+
+        // --- Top Products (Bar) ---
+        const topCtx = document.getElementById('topProductsChart').getContext('2d');
+        const topLabels = {{ top_products_labels|safe }};
+        const topData = {{ top_products_data|safe }};
+        
+        if (topLabels.length === 0) {
+            document.getElementById('topProductsChart').parentElement.innerHTML = '<p class="text-muted text-center mt-5">No top products yet.</p>';
+        } else {
+            new Chart(topCtx, {
+                type: 'bar',
+                data: {
+                    labels: topLabels,
+                    datasets: [{
+                        label: 'Quantity Sold',
+                        data: topData,
+                        backgroundColor: '#f6c23e',
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

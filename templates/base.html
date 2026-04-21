@@ -37,6 +37,12 @@
         <ul class="navbar-nav ms-auto align-items-center gap-3">
           {% if user.is_superuser %}
           <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center" href="{% url 'accounts:dashboard' %}">
+              <i class="fas fa-chart-pie mb-1"></i>
+              <span class="small">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link d-flex flex-column align-items-center" href="{% url 'shop:sell' %}">
               <i class="fas fa-store mb-1"></i>
               <span class="small">Sell</span>
@@ -116,28 +122,28 @@
         <div class="col-md-3">
           <h6 class="fw-bold text-white mb-3">About</h6>
           <ul class="list-unstyled d-flex flex-column gap-2">
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press</a></li>
+            <li><a href="{% url 'messaging:contact_admin' %}">Contact Us</a></li>
+            <li><a href="{% url 'shop:info_page' 'about-us' %}">About Us</a></li>
+            <li><a href="{% url 'shop:info_page' 'careers' %}">Careers</a></li>
+            <li><a href="{% url 'shop:info_page' 'press' %}">Press</a></li>
           </ul>
         </div>
         <div class="col-md-3">
           <h6 class="fw-bold text-white mb-3">Help</h6>
           <ul class="list-unstyled d-flex flex-column gap-2">
-            <li><a href="#">Payments</a></li>
-            <li><a href="#">Shipping</a></li>
-            <li><a href="#">Cancellation & Returns</a></li>
-            <li><a href="#">FAQ</a></li>
+            <li><a href="{% url 'shop:info_page' 'payments' %}">Payments</a></li>
+            <li><a href="{% url 'shop:info_page' 'shipping' %}">Shipping</a></li>
+            <li><a href="{% url 'shop:info_page' 'cancellation' %}">Cancellation & Returns</a></li>
+            <li><a href="{% url 'shop:info_page' 'faq' %}">FAQ</a></li>
           </ul>
         </div>
         <div class="col-md-3">
           <h6 class="fw-bold text-white mb-3">Policy</h6>
           <ul class="list-unstyled d-flex flex-column gap-2">
-            <li><a href="#">Return Policy</a></li>
-            <li><a href="#">Terms of Use</a></li>
-            <li><a href="#">Security</a></li>
-            <li><a href="#">Privacy</a></li>
+            <li><a href="{% url 'shop:info_page' 'return-policy' %}">Return Policy</a></li>
+            <li><a href="{% url 'shop:info_page' 'terms' %}">Terms of Use</a></li>
+            <li><a href="{% url 'shop:info_page' 'security' %}">Security</a></li>
+            <li><a href="{% url 'shop:info_page' 'privacy' %}">Privacy</a></li>
           </ul>
         </div>
         <div class="col-md-3">

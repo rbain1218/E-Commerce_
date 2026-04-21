@@ -80,3 +80,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'krishnapramanikram259@gmail.com'
 EMAIL_HOST_PASSWORD = 'poix habg foxt bgdg'    
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Stripe API Keys (Test Mode Data)
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', 'pk_test_placeholder')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', 'sk_test_placeholder')

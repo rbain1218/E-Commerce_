@@ -56,8 +56,8 @@
         <form method="post" novalidate>
           {% csrf_token %}
           <p class="mb-3 text-muted">
-            <i class="fas fa-info-circle me-1"></i> This is a dummy payment. Click 
-            <strong>Pay Now</strong> to confirm your order.
+            <i class="fas fa-lock me-1 text-success"></i> Secure payment processed by <strong>Stripe</strong>. 
+            Click the button below to be redirected to the secure checkout page.
           </p>
 
           <ul class="list-group mb-4 shadow-sm rounded">
@@ -79,7 +79,7 @@
           </ul>
 
           <button type="submit" class="btn btn-primary w-100 fw-semibold">
-            <i class="fas fa-credit-card me-2"></i> Pay Now
+            <i class="fab fa-stripe-s me-2"></i> Proceed to Stripe Checkout
           </button>
         </form>
 

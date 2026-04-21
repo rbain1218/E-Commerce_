@@ -23,3 +23,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+class OfferBanner(models.Model):
+    title = models.CharField(max_length=200, default="Big Savings on Top Brands")
+    subtitle = models.TextField(default="Get the best deals on electronics, fashion, and more. Free shipping on orders over ₹500.")
+    button_text = models.CharField(max_length=50, default="Shop Now")
+    button_link = models.CharField(max_length=255, default="#products")
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
+        
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            OfferBanner.objects.filter(is_active=True).update(is_active=False)
+        super(OfferBanner, self).save(*args, **kwargs)
