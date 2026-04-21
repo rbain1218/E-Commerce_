@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Product, OfferBanner, Category
 from .forms import ProductForm
 from orders.cart import Cart
+import random
 
 def home(request):
     default_categories = [
@@ -91,3 +92,34 @@ def info_page(request, slug):
     }
     title = titles.get(slug, 'Information')
     return render(request, 'shop/info.html', {'title': title, 'slug': slug})
+
+
+def home(request):
+    default_categories = [
+        {'name': 'Mobiles', 'slug': 'mobiles'},
+        {'name': 'Fashion', 'slug': 'fashion'},
+        {'name': 'Electronics', 'slug': 'electronics'},
+        {'name': 'Home', 'slug': 'home'},
+        {'name': 'Sports', 'slug': 'sports'},
+    ]
+
+    categories = list(Category.objects.all())
+    if not categories:
+        for item in default_categories:
+            Category.objects.get_or_create(name=item['name'], slug=item['slug'])
+        categories = list(Category.objects.all())
+
+    products = list(Product.objects.order_by('-created_at'))
+
+    
+    for p in products:
+        p.discount = random.randint(10, 65)
+        p.old_price = int(p.price + (p.price * p.discount / 100))
+
+    active_offer = OfferBanner.objects.filter(is_active=True).first()
+
+    return render(request, 'shop/home.html', {
+        'products': products,
+        'offer': active_offer,
+        'categories': categories
+    })

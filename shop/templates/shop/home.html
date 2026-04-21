@@ -164,7 +164,7 @@
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card product-card">
         <!-- Fake Discount Badge for aesthetics -->
-        <div class="discount-badge">20% OFF</div>
+         <div class="discount-badge">{{ p.discount }}% OFF</div>
 
         <a href="{% url 'shop:product_detail' p.id %}" class="text-decoration-none">
           <div class="product-img-container">
@@ -183,7 +183,7 @@
             </div>
             <div class="d-flex align-items-baseline gap-2">
               <span class="fw-bold fs-5 text-dark">₹{{ p.price }}</span>
-              <span class="text-muted small text-decoration-line-through">₹{{ p.price|add:"500" }}</span>
+              <span class="text-muted small text-decoration-line-through">₹{{ p.old_price }}</span>
             </div>
             {% if p.stock < 5 %} <p class="text-danger small mb-0 mt-1 fw-semibold">Only {{ p.stock }} left!</p>
               {% endif %}
